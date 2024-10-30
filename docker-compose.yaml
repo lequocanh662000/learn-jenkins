@@ -1,0 +1,22 @@
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+  ssh-agent:
+    image: jenkins/ssh-agent
+    ports:
+      - "2222:22"
+    environment:
+      JENKINS_AGENT_SSH_PUBKEY: "<public key of command ssh-keygen -f ~/.ssh/jenkins_agent_key in Controller>"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+volumes:
+  jenkins_home:
